@@ -1,0 +1,25 @@
+digraph AlgorithmAnalysis {
+    node [shape=box];
+    A [label="Is your algorithm efficient?"];
+    A1 [label="Does your problem have optimal substructure \n and overlapping subproblems?"];
+    B [label="Approximate Analysis: \n Create an efficient approximate algorithm.\n Calc Approximation Ratio \n (compare Quality to the optimal)"];
+    B2 [label="Use dynamic programming"];
+    C [label="You have an efficient algorithm"];
+    D [label="Online vs Offline"];
+    E [label="Use Competitive Analysis\nCompetitive ratio: \n Quality of online vs Offline"];
+    F [label="Use Amortized Analysis\n(compare average complexity to worst-case)"];
+    
+    // Flow connections
+    A -> A1 [label="No"];
+    A -> C [label="Yes"];
+    A1 -> B [label="No"];
+    A1 -> B2 [label="Yes"];
+    B2 -> C;
+    B -> C;
+    C -> D;
+    D -> E [label="Online"];
+    D -> F [label="Offline"];
+    
+    // Formatting
+    rankdir=TB;
+}
