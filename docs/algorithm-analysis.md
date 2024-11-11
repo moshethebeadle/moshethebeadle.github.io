@@ -21,3 +21,11 @@ Both Competitive and Amortized deal with sequences of steps: Competitive because
 
 ### Diagram
 ![a flowchart showing when you'd use the different analysis types](analysis.png "Algorithm Analysis Flowcharts")
+
+## What does each type care about?
+
+| Type | Quality (Ratio) | Efficiency (Computational Complexity) | 
+| ---- | - | - |
+| Approximate | Approximation Ratio | Assumes optimal is inefficient, approx much more |
+| Competitive | Competitive Ratio | Assumes offline algorithm is efficient and that online algorithm will also be efficient | 
+| Amortized | Doesn't care, not comparing one algorithm to another | Cares about efficiency of various steps *within* the single algorithm | 
