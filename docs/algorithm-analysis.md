@@ -26,6 +26,27 @@ Both Competitive and Amortized deal with sequences of steps: Competitive because
 
 | Type | Quality (Ratio) | Efficiency (Computational Complexity) | 
 | ---- | - | - |
-| Approximate | Approximation Ratio | Assumes optimal is inefficient, approx much more |
-| Competitive | Competitive Ratio | Assumes offline algorithm is efficient and that online algorithm will also be efficient | 
+| Approximate | Approximation Ratio of Approximate to Optimal | Assumes optimal is inefficient, approx much more |
+| Competitive | Competitive Ratio of Online to Offline | Assumes offline algorithm is efficient and that online algorithm will also be efficient | 
 | Amortized | Doesn't care, not comparing one algorithm to another | Cares about efficiency of various steps *within* the single algorithm | 
+
+## Efficiency vs Quality
+
+From ChatGPT:
+
+
+In the context of an approximation algorithm, quality and efficiency are often balanced against each other:
+
+### Quality:
+Refers to how close the algorithm's solution is to the optimal solution.
+Measured by the approximation ratio, which indicates the worst-case bound on how far the solution deviates from optimal. For example, a ratio of 2 means the solution is at most twice as bad as the optimal.
+Higher quality often requires more complex algorithms or longer runtimes, especially if the approximation ratio is close to 1 (near-optimal).
+
+### Efficiency:
+Refers to how fast the algorithm runs and how much computational resources (e.g., time and space) it uses.
+Efficient algorithms typically run in polynomial time, making them feasible for large inputs.
+However, improving efficiency can sometimes reduce the solution quality, leading to higher approximation ratios.
+
+### Trade-off in Approximation Algorithms:
+**Better Quality**: Often means more sophisticated or time-consuming processes, potentially moving closer to the optimal solution but increasing computation time.
+**Higher Efficiency**: Usually achieved by simplifying the algorithm's logic or using heuristics that run quickly but may result in a lower-quality solution.
