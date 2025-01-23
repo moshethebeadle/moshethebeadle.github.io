@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Challenge Times</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="challengeName">Challenge Times</h1>
+    <form id="timeForm">
+        <label for="time">Your Time (seconds):</label>
+        <input type="number" id="time" required>
+        <br>
+        <button type="submit">Record Time</button>
+    </form>
+    <h2>Your Times</h2>
+    <ul id="timeList"></ul>
+    <script>
+        // Utility to get URL parameters
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // Initialize challenge from URL
+        const challengeName = getQueryParam('challenge') || 'Unknown Challenge';
+        const challengeKey = `challenge_${challengeName}`;
+        document.getElementById('challengeName').textContent = `Times for "${challengeName}"`;
+
+        // Load stored times from LocalStorage
+        const loadTimes = () => {
+            const storedTimes = localStorage.getItem(challengeKey);
+            return storedTimes ? JSON.parse(storedTimes) : [];
+        };
+
+        // Save times to LocalStorage
+        const saveTimes = (times) => {
+            localStorage.setItem(challengeKey, JSON.stringify(times));
+        };
+
+        // Render times list
+        const renderTimes = () => {
+            const times = loadTimes();
+            times.sort((a, b) => a.time - b.time); // Sort by time
+            const timeList = document.getElementById('timeList');
+            timeList.innerHTML = '';
+            times.forEach((entry, index) => {
+                const li = document.createElement('li');
+                li.textContent = `${index + 1}. ${entry.time}s - ${new Date(entry.date).toLocaleDateString()}`;
+                timeList.appendChild(li);
+            });
+        };
+
+        // Handle time submission
+        document.getElementById('timeForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const timeInput = document.getElementById('time');
+            const time = parseInt(timeInput.value);
+            if (isNaN(time) || time <= 0) {
+                alert('Please enter a valid time.');
+                return;
+            }
+
+            const times = loadTimes();
+            times.push({ time, date: new Date().toISOString() });
+            saveTimes(times);
+            timeInput.value = '';
+            renderTimes();
+        });
+
+        // Initial render
+        renderTimes();
+    </script>
+</body>
+</html>
