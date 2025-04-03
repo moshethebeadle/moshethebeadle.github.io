@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy-Add Affinity Soccer Referee Schedule to Your Cal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #333;
+        }
+        a.bookmarklet-link {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        a.bookmarklet-link:hover {
+            background-color: #45a049;
+        }
+        .instructions {
+            margin-top: 20px;
+        }
+        .instructions ol {
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="content">
+    <h1>Easily add your Affinity soccer schedule to your calendar!</h1>
+
+    <p>It's called a "bookmarklet".  Follow the steps below to add the bookmarklet to your browser's bookmarks bar. You can drag the link below to your bookmarks bar, or manually add it.</p>
+
+    <a href="javascript:(function () {    function generateICS() {        const title = document.querySelector('.title').innerText.trim();        let tables = document.querySelectorAll('table#Table4');        let events = [];        tables.forEach((table) => {            let bracketHeader = table.previousElementSibling?.innerText.trim();            let dateMatch = bracketHeader.match(/\b(\w+),\s(\w+)\s(\d{1,2}),\s(\d{4})\b/);            if (!dateMatch) return;            let [_, day, month, dayNum, year] = dateMatch;            let gameDate = new Date(%60${month} ${dayNum}, ${year}%60);            let rows = table.querySelectorAll('tr.tbody1, tr.tbody0');            rows.forEach((row) => {                let cells = row.querySelectorAll('td');                if (cells.length < 11) return;                let gameNumber = cells[0].innerText.trim();                let venue = cells[1].innerText.trim();                let time = cells[2].innerText.trim();                let field = cells[3].innerText.trim();                let homeTeam = cells[5].innerText.trim();                let homeScore = cells[6].innerText.trim();                let awayTeam = cells[8].innerText.trim();                let awayScore = cells[9].innerText.trim();                let refereeType = cells[10].innerText.trim();                let group = cells[4].innerText.trim();                let refereeRole = refereeType.includes('Asst') ? 'AR' : 'CR';                let timeMatch = time.match(/(\d{1,2}):(\d{2})\s?(AM|PM)/i);                if (!timeMatch) return;                let [__, hour, minute, period] = timeMatch;                hour = parseInt(hour);                if (period.toUpperCase() === 'PM' && hour < 12) hour += 12;                if (period.toUpperCase() === 'AM' && hour === 12) hour = 0;                let startDateTime = new Date(gameDate);                startDateTime.setHours(hour, minute, 0);                let endDateTime = new Date(startDateTime);                endDateTime.setMinutes(startDateTime.getMinutes() + 75);                let event = %60BEGIN:VEVENT\nUID:Affinity-UYSA-${gameNumber}\nDTSTAMP:${formatDateICS(new Date())}\nDTSTART:${formatDateICS(startDateTime)}\nDTEND:${formatDateICS(endDateTime)}\nSUMMARY:Game ${gameNumber} (${refereeRole}) - ${homeTeam} vs ${awayTeam}\nLOCATION:${venue}, Field ${field}\nDESCRIPTION:Game ${gameNumber}: ${homeTeam} (${homeScore}) vs ${awayTeam} (${awayScore}) at ${venue} on Field ${field}. Group: ${group} Referee Type: ${refereeType} Cal Title: ${title}\nEND:VEVENT\n%60;                events.push(event)            });        });        let icsContent = %60BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Tournament Scheduler//Game Calendar//EN\n${events.join('\n')}\nEND:VCALENDAR%60;        let blob = new Blob([icsContent], {type: 'text/calendar'});        let link = document.createElement('a');        link.href = URL.createObjectURL(blob);        link.download = 'games_schedule.ics';        document.body.appendChild(link);        link.click();        document.body.removeChild(link)    }    function formatDateICS(date) {        return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'    }    generateICS()})();"
+       class="bookmarklet-link"
+       title="Save Affinity to Cal!">
+        Save Affinity Schedule
+    </a>
+
+    <div class="instructions">
+        <h2>Instructions</h2>
+        <p>There are two ways to add a bookmarklet to your browser:</p>
+        <ol>
+            <li><strong>Using the Provided Link:</strong>
+                <ul>
+                    <li>Click and hold the "Click to Add Bookmarklet" link above.</li>
+                    <li>Drag it to your browser's bookmarks bar and release the mouse button.</li>
+                    <li>The bookmarklet is now added to your bookmarks bar.</li>
+                </ul>
+            </li>
+            <li><strong>Manually Creating a Bookmarklet:</strong>
+                <ul>
+                    <li>Right-click the "Click to Add Bookmarklet" link above and select "Bookmark this link" or "Add to Favorites."</li>
+                    <li>In the dialog box, name it something descriptive (e.g., "Hello World Alert").</li>
+                    <li>Click "Save" to add the bookmarklet to your bookmarks bar.</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <h2>Usage:</h2>
+    <p>Once you've added the bookmarklet to your browser's bookmarks bar, simply click it to run the JavaScript code embedded in the bookmarklet. In this example, it will show an alert with the message "Hello, World!".</p>
+
+    <h2>Additional Resources:</h2>
+    <ul>
+        <li><a href="https://joeldare.com/creating-a-drag-and-drop-bookmarklet" target="_blank">Creating a Drag and Drop Bookmarklet</a></li>
+        <li><a href="https://caiorss.github.io/bookmarklet-maker/" target="_blank">Bookmarklet Maker</a></li>
+        <li><a href="https://mreidsma.github.io/bookmarklets/installing.html" target="_blank">Installing Bookmarklets</a></li>
+    </ul>
+</div>
+
+</body>
+</html>
